@@ -27,30 +27,39 @@ class SecondViewController: UIViewController {
             message: "ใส่ข้อมูลให้ครบทุกช่อง",
             preferredStyle: .alert
         )
-        alert.addTextField(configurationHandler: {tf in
-            tf.placeholder = "พอใจ/ปานกลาง/ไม่พอใจ"
-            tf.font = UIFont.systemFont(ofSize: 18)
-            tf.keyboardType = .phonePad
-        })
         
         let btCancel = UIAlertAction(
-            title: "Cancel",
-            style: .cancel,
-            handler: nil
-        )
-        let btOK = UIAlertAction(
-            title: "OK",
+            title: "พอใจ",
             style: .default,
             handler: { _ in
-                let result = alert.textFields!.first!.text!
+                self.sql = "insert into test values (null, '\(self.arr[0])', '\(self.arr[1])', '\(self.arr[2])','พอใจ')"
+                sqlite3_exec(self.db, self.sql, nil, nil, nil)
                 
-                self.sql = "insert into test values (null, '\(self.arr[0])', '\(self.arr[1])', '\(self.arr[2])','\(result)')"
+                self.select()
+        })
+        
+        let btOK = UIAlertAction(
+            title: "ปานกลาง",
+            style: .default,
+            handler: { _ in
+                self.sql = "insert into test values (null, '\(self.arr[0])', '\(self.arr[1])', '\(self.arr[2])','ปานกลาง')"
                 sqlite3_exec(self.db, self.sql, nil, nil, nil)
             
                 self.select()
         } )
+        
+        let btNot = UIAlertAction(
+            title: "แย่",
+            style: .default,
+            handler: { _ in
+                self.sql = "insert into test values (null, '\(self.arr[0])', '\(self.arr[1])', '\(self.arr[2])','แย่')"
+                sqlite3_exec(self.db, self.sql, nil, nil, nil)
+                
+                self.select()
+        } )
         alert.addAction(btCancel)
         alert.addAction(btOK)
+        alert.addAction(btNot)
         present(alert, animated:true, completion: nil)
     }
 
